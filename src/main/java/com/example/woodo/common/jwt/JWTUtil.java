@@ -11,11 +11,13 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -54,7 +56,7 @@ public class JWTUtil {
     private String createToken(User user) {
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
-        claims.put("userId", user.getUserId());
+        claims.put("userId", user.getId());
 
         // 토큰 만료 기간 생성
         long now = (new Date()).getTime();
@@ -130,6 +132,44 @@ public class JWTUtil {
         }
 
         return null;
+    }
+
+
+    // 사용자 id 리턴
+    public static Long getCurrentUserId() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new RuntimeException(" Security Context에 인증 정보가 없습니다.");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new UserNotFoundException();
+        }
+
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getUserId();;
+
+        return userId;
+    }
+
+    // 사용자 정보 리턴
+    public static User getCurrentUserInfo() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new RuntimeException(" Security Context에 인증 정보가 없습니다.");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new UserNotFoundException();
+        }
+
+
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+
+        User userInfo = new User(userDetails.getUserId());
+        return userInfo;
+
     }
 
 

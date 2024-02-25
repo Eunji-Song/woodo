@@ -28,6 +28,11 @@ import java.sql.SQLException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(ApplicationException.class)
+    protected ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
     // Not found
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<Object> handleNotfoundException(NotFoundException ex) {
@@ -127,6 +132,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiResult apiResult = ApiResult.error(ApiResultCode.ERROR, ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResult);
     }
+
+
 
 
 }
