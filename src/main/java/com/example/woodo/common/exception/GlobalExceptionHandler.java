@@ -30,7 +30,10 @@ import java.sql.SQLException;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     protected ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        log.info("Application Exception : {}", ex.getMessage());
+
+        ApiResult apiResult = ApiResult.error(ex.getResultCode(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResult);
     }
 
     // Not found
@@ -132,8 +135,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiResult apiResult = ApiResult.error(ApiResultCode.ERROR, ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResult);
     }
-
-
 
 
 }
