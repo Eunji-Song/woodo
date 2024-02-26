@@ -24,10 +24,7 @@ public class UserController {
     @Operation(summary = "회원가입", description = "이메일 중복 불가")
     @PostMapping("/join")
     public ApiResult join(@RequestBody @Valid UserJoinRequestDto userJoinRequestDto) {
-        boolean isSuccess = userService.join(userJoinRequestDto);
-        if (!isSuccess) {
-            return ApiResult.error();
-        }
+        userService.join(userJoinRequestDto);
         return ApiResult.success();
     }
 

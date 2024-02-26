@@ -20,7 +20,6 @@ public class BookConsignmentRequestDto {
     @DecimalMin(value = "0", inclusive = true, message = "정수 값만 입력해 주세요.")
     private int rentalPrice;
 
-    @NotNull(message = "위탁 회원 정보를 입력해주세요.")
     private User user;
 
     @Builder(toBuilder = true)
