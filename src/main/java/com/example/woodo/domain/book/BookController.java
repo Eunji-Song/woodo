@@ -24,8 +24,8 @@ public class BookController {
     @GetMapping("")
     public ApiResult findAllBooks(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "20") int size,
-                                  @RequestParam(defaultValue = "price") BookSortTypeEnum sortBy,
-                                  @RequestParam(defaultValue = "asc") String sortDirection) {
+                                  @RequestParam(defaultValue = "RENTAL_COUNT") BookSortTypeEnum sortBy,
+                                  @RequestParam(defaultValue = "desc") String sortDirection) {
         // 정렬 데이터를 담은 객체 생성
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy.getType());
 
