@@ -71,7 +71,7 @@ public class BookService {
         // 도서 ISBN 중복 검사
         boolean isExistBook = bookRepository.existsByIsbn(isbn);
         if (isExistBook) {
-            throw new BookConflictException(isbn);
+            throw new BookConflictException();
         }
 
         // DTO -> Entity 변환

@@ -32,12 +32,11 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public boolean join(UserJoinRequestDto userJoinRequestDto) {
-
+    public void join(UserJoinRequestDto userJoinRequestDto) {
         // 데이터 중복 조회
         boolean isExistEmail = userRepository.existsByEmail(userJoinRequestDto.getEmail());
         if (isExistEmail) {
-            throw new UserConflictException(userJoinRequestDto.getEmail());
+            throw new UserConflictException();
         }
 
         // 비밀번호 암호화
@@ -48,9 +47,6 @@ public class UserService {
         User user = userMapper.joinDtoToEntity(userJoinRequestDto);
         userRepository.save(user);
         Long userId = user.getId();
-
-        // 회원의 Id값 리턴
-        return (userId != null);
     }
 
     // 로그인

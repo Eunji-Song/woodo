@@ -48,7 +48,7 @@ public class RentalService {
         if (rentalRequestDto.getBooksId().length > 0) {
             for (Long bookId : selectedBooksId) {
                 // 도서 유효 여부 확인
-                Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookNotfoundException("유효하지 않은 도서가 선택되었습니다."));
+                Book book = bookRepository.findById(bookId).orElseThrow(BookNotfoundException::new);
 
                 // 도서의 마지막 로그 호출
                 RentalLog lastLog = rentalRepository.findFirstByBookIdOrderByIdDesc(bookId);
@@ -57,7 +57,7 @@ public class RentalService {
                 if (!ObjectUtils.isEmpty(lastLog)) {
                     // 반납 일자가 null인 경우 대여 불가
                     if (lastLog.getReturnDate() == null) {
-                        throw new BookAlreadyRentedException(book.getTitle());
+                        throw new BookAlreadyRentedException();
                     }
                 }
 

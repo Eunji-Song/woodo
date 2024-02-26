@@ -41,8 +41,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleNotfoundException(NotFoundException ex) {
         log.info("NotFoundException : {}", ex.getMessage());
 
-        ApiResult apiResult = ApiResult.error(ApiResultCode.NOT_FOUND, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResult);
+        ApiResult apiResult = ApiResult.error(ex.getResultCode(), ex.getResultCode().getMessage());
+        return ResponseEntity.status(ex.getResultCode().getCode()).body(apiResult);
     }
 
     // Conflict
@@ -50,8 +50,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConflictException(ConflictException ex) {
         log.info("ConflictException : {}", ex.getMessage());
 
-        ApiResult apiResult = ApiResult.error(ApiResultCode.CONFLICT, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResult);
+        ApiResult apiResult = ApiResult.error(ex.getResultCode(), ex.getResultCode().getMessage());
+        return ResponseEntity.status(ex.getResultCode().getCode()).body(apiResult);
     }
 
     // CUSTOM 유효성 검사

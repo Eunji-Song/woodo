@@ -6,15 +6,13 @@ import lombok.Getter;
 @Getter
 public class ApplicationException extends RuntimeException {
     private ApiResultCode resultCode;
-    public ApplicationException(ApiResultCode ex) {
-        super(ex.getMessage());
-        this.resultCode = ex;
+    private String message;
+
+    public ApplicationException() {
+        super();
     }
 
-    public ApplicationException(ApiResultCode ex, String message) {
-        super(message);
-        this.resultCode = ex;
+    public ApplicationException(String message) {
+        this.message = message;
     }
-
-
 }
