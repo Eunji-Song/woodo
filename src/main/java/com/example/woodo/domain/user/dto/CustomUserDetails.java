@@ -1,7 +1,6 @@
 package com.example.woodo.domain.user.dto;
 
 import com.example.woodo.domain.user.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,7 +15,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public Long getUserId() {
-        return user.getUserId();
+        return user.getId();
     }
 
     @Override

@@ -14,9 +14,10 @@ public enum ApiResultCode {
 
     // Auth
     UNAUTHORIZED_USER(401, "인증되지 않은 사용자입니다."), // HttpStatus.UNAUTHORIZED
-    EXPIRED_TOKEN(401, "유효하지 않은 토큰입니다.");  // 토큰 만료 or 유효하지 않은 토큰
+    EXPIRED_TOKEN(401, "유효하지 않은 토큰입니다."),  // 토큰 만료 or 유효하지 않은 토큰
 
-    // by domain
+    // Rental
+    ALREADY_RENTED_BOOK(409, "대여가 불가능한 도서입니다.");
 
     private final int code;
     private final String message;

@@ -1,8 +1,5 @@
 package com.example.woodo.domain.rental;
 
-import com.example.woodo.common.exception.ConflictException;
-import com.example.woodo.common.exception.InvalidDataException;
-import com.example.woodo.common.exception.NotFoundException;
 import com.example.woodo.common.exception.book.BookNotfoundException;
 import com.example.woodo.common.exception.rental.BookAlreadyRentedException;
 import com.example.woodo.common.jwt.JWTUtil;
@@ -18,11 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,9 +37,6 @@ public class RentalService {
 
         // 사용자 정보
         User user = JWTUtil.getCurrentUserInfo();
-
-        // 선택한 도서의 대여 로그 가져오기
-
 
         /* 대여 로그 생성 */
 

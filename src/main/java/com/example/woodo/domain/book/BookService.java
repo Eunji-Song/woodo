@@ -7,15 +7,11 @@ import com.example.woodo.domain.book.dto.BookConsignmentRequestDto;
 import com.example.woodo.domain.book.dto.BookDto;
 import com.example.woodo.domain.book.dto.BookListDto;
 import com.example.woodo.domain.book.repository.BookRepository;
-import com.example.woodo.domain.book.repository.BookRepositoryCustomImpl;
 import com.example.woodo.domain.user.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service

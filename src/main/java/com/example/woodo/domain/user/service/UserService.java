@@ -5,7 +5,7 @@ import com.example.woodo.common.exception.user.UserNotFoundException;
 import com.example.woodo.common.jwt.JWTUtil;
 import com.example.woodo.domain.user.User;
 import com.example.woodo.domain.user.UserMapper;
-import com.example.woodo.domain.user.UserRepository;
+import com.example.woodo.domain.user.repository.UserRepository;
 import com.example.woodo.domain.user.dto.UserJoinRequestDto;
 import com.example.woodo.domain.user.dto.UserLoginRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class UserService {
         // 데이터 저장
         User user = userMapper.joinDtoToEntity(userJoinRequestDto);
         userRepository.save(user);
-        Long userId = user.getUserId();
+        Long userId = user.getId();
 
         // 회원의 Id값 리턴
         return (userId != null);

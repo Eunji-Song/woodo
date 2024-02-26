@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,10 +24,10 @@ public class BookController {
     @GetMapping("")
     public ApiResult findAllBooks(@RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "20") int size,
-                                  @RequestParam(defaultValue = "price") String sortBy,
+                                  @RequestParam(defaultValue = "price") BookSortTypeEnum sortBy,
                                   @RequestParam(defaultValue = "asc") String sortDirection) {
         // 정렬 데이터를 담은 객체 생성
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy.getType());
 
         // 페이징 처리를 위한 객체 생성
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -43,7 +42,7 @@ public class BookController {
     // 도서 위탁하기
     @Operation(summary = "도서 위탁", description = "유효성 검사 조건 \n\n - ISBN 값 중복 불가\n\n - ISBN 길이 최소 10글자 이상/하이픈 입력한 경우 17글자 이하")
     @PostMapping("/consignment")
-    public ApiResult consignment(@RequestBody @Valid BookConsignmentRequestDto bookConsignmentRequestDto, BindingResult bindingResult) {
+    public ApiResult consignment(@RequestBody @Valid BookConsignmentRequestDto bookConsignmentRequestDto) {
         bookService.consignment(bookConsignmentRequestDto);
         return ApiResult.success();
     }

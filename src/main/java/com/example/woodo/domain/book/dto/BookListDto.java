@@ -9,14 +9,12 @@ import java.util.List;
 @Getter
 public class BookListDto {
     private List<BookDto> list = new ArrayList<>();
-    private Long totalPages;
     private Long totalCount;
 
 
     @Builder(toBuilder = true)
-    public BookListDto(List<BookDto> list, Long totalPages, Long totalCount) {
+    public BookListDto(List<BookDto> list, Long totalCount) {
         this.list = list;
-        this.totalPages = totalPages;
         this.totalCount = totalCount;
     }
 

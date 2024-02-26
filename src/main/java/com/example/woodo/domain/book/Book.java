@@ -26,11 +26,6 @@ public class Book extends BaseEntity {
     @ColumnDefault("0")
     private int rentalPrice;
 
-    // 대여 횟수 (로그 데이터가 많아지는 경우 조인 시 조회 속도가 느려질 수 있으므로 컬럼으로 관리)
-    @Column(name = "rental_count")
-    @ColumnDefault("0")
-    private int rentalCount;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

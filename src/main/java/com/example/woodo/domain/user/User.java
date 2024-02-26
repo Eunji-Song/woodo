@@ -13,8 +13,8 @@ import lombok.Getter;
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long userId;
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(name = "name")
     private String username;
@@ -44,5 +44,9 @@ public class User extends BaseEntity {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    public User(Long id) {
+        this.id = id;
     }
 }

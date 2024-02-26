@@ -2,7 +2,7 @@ package com.example.woodo.domain.user.service;
 
 import com.example.woodo.common.exception.user.UserNotFoundException;
 import com.example.woodo.domain.user.User;
-import com.example.woodo.domain.user.UserRepository;
+import com.example.woodo.domain.user.repository.UserRepository;
 import com.example.woodo.domain.user.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

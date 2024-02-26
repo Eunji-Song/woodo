@@ -5,11 +5,14 @@ import com.example.woodo.domain.book.dto.BookDto;
 import com.example.woodo.domain.book.dto.QBookDto;
 import com.example.woodo.domain.rental.QRentalLog;
 import com.example.woodo.domain.user.QUser;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,22 +32,28 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
         QRentalLog rentalLog = new QRentalLog("l");
 
 
-        // Total Count Query
-        Long totalCount = queryFactory
-                .select(book.count())
-                .from(book)
-                .fetchOne();
-
 
 
 
         // 정렬 생성
         OrderSpecifier<?> orderSpecifier = getOrderSpecifier(pageable, book);
 
-
         // list 조회 Query
         List<BookDto> list = queryFactory
-                .select(new QBookDto(book.id, book.title, book.isbn, book.rentalPrice, user.username))
+                .select(
+                    new QBookDto(
+                            book.id, book.title, book.isbn, book.rentalPrice, user.username
+                            // 대여 횟수 서브 쿼리 생성
+                            , ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(rentalLog.count().intValue())
+                                            .from(rentalLog)
+                                            .where(rentalLog.book.id.eq(book.id))
+                                , "rentalCount"
+                            )
+                    )
+
+                )
                 .from(book)
                 .innerJoin(book.user, user)
                 .offset(pageable.getOffset())
@@ -54,22 +63,31 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
 
 
 
+        // Total Count Query
+        Long totalCount = queryFactory
+                .select(book.count())
+                .from(book)
+                .fetchOne();
 
         return new PageImpl<>(list, pageable, totalCount);
     }
 
+    // TODO : 다중 정렬
     private OrderSpecifier<?> getOrderSpecifier(Pageable pageable, QBook book) {
-        String orderTarget = pageable.getSort().toList().get(0).getProperty();
-        Sort.Direction dir = pageable.getSort().toList().get(0).getDirection();
+        Sort.Order firstOrder = pageable.getSort().toList().get(0);
+        String orderTarget = firstOrder.getProperty();
+        Sort.Direction direction = firstOrder.getDirection();
+
 
         if (!pageable.getSort().isEmpty()) {
             switch (orderTarget) {
                 case "rentalPrice" :
-                    return dir == Sort.Direction.ASC ? book.rentalPrice.asc() : book.rentalPrice.desc();
+                    return direction == Sort.Direction.ASC ? book.rentalPrice.asc() : book.rentalPrice.desc();
                 case "rentalCount" :
-                    return dir == Sort.Direction.ASC ? book.rentalCount.asc() : book.rentalCount.desc();
+                    NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "rentalCount");
+                    return direction == Sort.Direction.ASC ? aliasCount.asc() : aliasCount.desc();
                 case "createdAt" :
-                    return dir == Sort.Direction.ASC ? book.createdAt.asc() : book.createdAt.desc();
+                    return direction == Sort.Direction.ASC ? book.createdAt.asc() : book.createdAt.desc();
                 default:
                     return book.id.desc();
             }

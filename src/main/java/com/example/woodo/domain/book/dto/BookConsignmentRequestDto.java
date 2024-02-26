@@ -3,7 +3,6 @@ package com.example.woodo.domain.book.dto;
 import com.example.woodo.domain.user.User;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @ToString
