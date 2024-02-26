@@ -31,10 +31,6 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
         QUser user = new QUser("u");
         QRentalLog rentalLog = new QRentalLog("l");
 
-
-
-
-
         // 정렬 생성
         OrderSpecifier<?> orderSpecifier = getOrderSpecifier(pageable, book);
 
@@ -58,9 +54,8 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                 .innerJoin(book.user, user)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(orderSpecifier)
+                .orderBy(orderSpecifier, book.title.asc())
                 .fetch();
-
 
 
         // Total Count Query
@@ -72,12 +67,10 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
         return new PageImpl<>(list, pageable, totalCount);
     }
 
-    // TODO : 다중 정렬
     private OrderSpecifier<?> getOrderSpecifier(Pageable pageable, QBook book) {
         Sort.Order firstOrder = pageable.getSort().toList().get(0);
         String orderTarget = firstOrder.getProperty();
         Sort.Direction direction = firstOrder.getDirection();
-
 
         if (!pageable.getSort().isEmpty()) {
             switch (orderTarget) {
@@ -92,6 +85,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
                     return book.id.desc();
             }
         }
+
         return book.id.desc();
 
     }

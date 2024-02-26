@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,18 +24,8 @@ public class BookController {
     // 대여하기 > 도서 목록
     @Operation(summary = "도서 목록 조회", description = "")
     @GetMapping("")
-    public ApiResult findAllBooks(@RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "20") int size,
-                                  @RequestParam(defaultValue = "RENTAL_COUNT") BookSortTypeEnum sortBy,
-                                  @RequestParam(defaultValue = "desc") String sortDirection) {
-        // 정렬 데이터를 담은 객체 생성
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy.getType());
-
-        // 페이징 처리를 위한 객체 생성
-        Pageable pageable = PageRequest.of(page, size, sort);
-
+    public ApiResult findAllBooks(@PageableDefault(page = 0, size = 20, sort = "rentalCount", direction = Sort.Direction.DESC) Pageable pageable) {
         BookListDto listDto = bookService.findAllBooks(pageable);
-
         return ApiResult.success(listDto);
     }
 

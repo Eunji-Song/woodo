@@ -76,7 +76,7 @@ public class RentalService {
 
     /**
      * 도서 반납
-     * - 10분 간격으로 스케줄러 실행
+     * - 10분 간격으로 스케줄러 실행 : 600000ms
      */
     @Scheduled(fixedDelay = 600000)
     public void bookReturn() {
