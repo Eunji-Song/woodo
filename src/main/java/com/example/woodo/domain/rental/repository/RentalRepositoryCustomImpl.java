@@ -25,8 +25,8 @@ public class RentalRepositoryCustomImpl implements RentalRepositoryCustom {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         LocalDateTime beforeSec = now.minusSeconds(10);
 
-        log.info("현재 : {}", now);
-        log.info("10초 전  : {}", beforeSec);
+        log.info("삭제 데이터 생성 시간 기준 : {}", beforeSec);
+
         queryFactory.update(rentalLog)
                 .set(rentalLog.returnDate, now)
                 .where(
